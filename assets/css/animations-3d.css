@@ -98,7 +98,8 @@
 
 /* Enhanced Button Animations */
 .btn-primary,
-.btn-secondary {
+.btn-secondary,
+.btn {
   position: relative;
   overflow: hidden;
   background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
@@ -128,13 +129,15 @@
 }
 
 .btn-primary:hover,
-.btn-secondary:hover {
+.btn-secondary:hover,
+.btn:hover {
   transform: translateY(-3px) scale(1.05);
   box-shadow: 0 15px 35px rgba(124, 58, 237, 0.5);
 }
 
 .btn-primary:active,
-.btn-secondary:active {
+.btn-secondary:active,
+.btn:active {
   transform: translateY(-1px) scale(1.02);
 }
 
@@ -317,29 +320,8 @@
   animation: loading 1s linear infinite;
 }
 
-/* Ripple Effect */
-.ripple {
-  position: relative;
-  overflow: hidden;
-}
-
-.ripple::after {
-  content: "";
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  width: 0;
-  height: 0;
-  border-radius: 50%;
-  background: rgba(255, 255, 255, 0.5);
-  transform: translate(-50%, -50%);
-  transition: width 0.6s, height 0.6s;
-}
-
-.ripple:active::after {
-  width: 200px;
-  height: 200px;
-}
+/* Ripple Effect - Removed generic .ripple class to prevent card interference */
+/* Ripple is now handled via JavaScript only */
 
 /* Stagger Animation Delays */
 .stagger-1 {
