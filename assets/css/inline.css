@@ -96,4 +96,59 @@
   }
 }
 
+/* Sponsors logos layout - normalize sizes and alignment */
+.logos {
+  display: flex; /* container uses flex to allow gap spacing to work reliably */
+  flex-wrap: wrap;
+  gap: 1.5rem;
+  align-items: stretch;
+  justify-content: center;
+}
+
+.logo-item {
+  /* Keep the existing grid classes (col-*) while ensuring consistent internal layout */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.75rem 0.5rem;
+  box-sizing: border-box;
+  min-height: 90px; /* ensures short logos don't shrink the row */
+}
+
+.logo-item img {
+  max-height: 64px; /* primary constraint for height uniformity */
+  max-width: 100%;
+  width: auto;
+  height: auto;
+  object-fit: contain; /* preserve aspect ratio without cropping */
+  display: block;
+  margin: 0 auto;
+  transition: transform 0.15s ease, opacity 0.15s ease;
+}
+
+/* Slightly larger logos on medium+ screens */
+@media (min-width: 768px) {
+  .logo-item {
+    min-height: 110px;
+    padding: 0.9rem 0.75rem;
+  }
+  .logo-item img {
+    max-height: 80px;
+  }
+}
+
+@media (min-width: 1200px) {
+  .logo-item {
+    min-height: 120px;
+  }
+  .logo-item img {
+    max-height: 92px;
+  }
+}
+
+/* Optional subtle hover effect to indicate interactivity */
+.logo-item:hover img {
+  transform: translateY(-3px);
+}
+
 /* End of inline.css */
