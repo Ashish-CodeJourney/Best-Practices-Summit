@@ -744,6 +744,32 @@
       <hr />
     </div>
 
+    <!-- Attendees section: populated from assets/data/attendees.json -->
+    <section id="attendees-section" class="attendees-section section">
+      <div class="container">
+        <h3 class="section-heading text-center mb-3">Attendees</h3>
+        <div class="section-intro text-center single-col-max mx-auto mb-4">
+          See who is attending and how many guests have registered.
+        </div>
+
+        <div id="attendees-meta" class="text-center mb-3" aria-live="polite">
+          <span id="attendees-count" class="fw-bold">0</span> attendees
+        </div>
+
+        <div id="attendees-container" class="attendees-grid">
+          <!-- attendee cards will be injected here -->
+          <div id="attendees-loader" class="text-center py-4">Loading attendees...</div>
+        </div>
+
+        <div id="attendees-error" class="text-center text-danger mt-3" style="display:none;">Could not load attendees.</div>
+
+      </div>
+    </section>
+
+    <div class="container">
+      <hr />
+    </div>
+
     <section id="schedule-section" class="schedule-section section">
       <div class="container">
         <h3 class="section-heading text-center mb-3">Schedule</h3>
@@ -1736,6 +1762,24 @@
                 tristique erat libero, condimentum porttitor nisl pharetra et.
               </p>
             </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Attendees modal: shows full attendee list when user clicks 'more' -->
+    <div class="modal fade" id="attendees-modal" tabindex="-1" aria-labelledby="attendeesModalLabel" aria-hidden="true">
+      <div class="modal-dialog modal-lg modal-dialog-centered">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="attendeesModalLabel">Attendees</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+            <div id="attendees-modal-body" class="attendees-grid"></div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
           </div>
         </div>
       </div>

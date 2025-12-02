@@ -1,0 +1,30 @@
+[
+  {
+    "name": "Ashish Vaghela",
+    "role": "Software CraftsPerson",
+    "company": "Nelkinda Software Craft",
+    "avatar": "assets/images/attendees/Ashish.jpg",
+    "linkedin": "https://www.linkedin.com/in/ashish-codejourney"
+  },
+  {
+    "name": "Neel Shah",
+    "role": "Developer Advocate",
+    "company": "Middleware.IO",
+    "avatar": "assets/images/attendees/Neel.png",
+    "linkedin": "https://www.linkedin.com/in/neelcshah/"
+  },
+  {
+    "name": "Rohit Chavda",
+    "role": "Full Stack Developer",
+    "company": "Group.one",
+    "avatar": "assets/images/attendees/Rohit.png",
+    "linkedin": "https://www.linkedin.com/in/rohitchavda/"
+  },
+  {
+    "name": "Viral Parmar",
+    "role": "Director",
+    "company": "Comexpo Cyber Security Foundation",
+    "avatar": "assets/images/attendees/Viral.png",
+    "linkedin": "https://www.linkedin.com/in/viral-parmar-8402a04a/"
+  }
+]
