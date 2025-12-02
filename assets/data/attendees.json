@@ -14,6 +14,13 @@
     "linkedin": "https://www.linkedin.com/in/neelcshah/"
   },
   {
+    "name": "Prashant Bhavsar",
+    "role": "Associate Consultant",
+    "company": "KPMG India",
+    "avatar": "assets/images/attendees/Prashant.png",
+    "linkedin": "https://www.linkedin.com/in/prashant-bhavsar-3o12/"
+  },
+  {
     "name": "Rohit Chavda",
     "role": "Full Stack Developer",
     "company": "Group.one",
@@ -26,12 +33,5 @@
     "company": "Comexpo Cyber Security Foundation",
     "avatar": "assets/images/attendees/Viral.png",
     "linkedin": "https://www.linkedin.com/in/viral-parmar-8402a04a/"
-  },
-  {
-    "name": "Prashant Bhavsar",
-    "role": "Associate Consultant",
-    "company": "KPMG India",
-    "avatar": "assets/images/attendees/Prashant.png",
-    "linkedin": "https://www.linkedin.com/in/prashant-bhavsar-3o12/"
   }
 ]
