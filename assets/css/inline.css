@@ -268,3 +268,26 @@
 .header .navbar-toggler-icon {
   background-image: none !important; /* prefer default icon styling; if theme provides an image, this keeps it visible */
 }
+
+/* Space for fixed header on standalone pages (ensures page headings aren't hidden under .header.fixed-top) */
+.page-with-fixed-header {
+  /* generous default to accommodate larger header logo + safe gap */
+  padding-top: 110px !important;
+}
+/* slightly smaller offsets for tablet and mobile */
+@media (max-width: 991px) {
+  .page-with-fixed-header {
+    padding-top: 100px !important;
+  }
+}
+@media (max-width: 575px) {
+  .page-with-fixed-header {
+    padding-top: 88px !important;
+  }
+}
+/* Ensure headings inside these pages leave space when navigated to via anchors */
+.page-with-fixed-header h1,
+.page-with-fixed-header h2,
+.page-with-fixed-header h3 {
+  scroll-margin-top: 120px; /* makes in-page anchors land below the fixed header */
+}
