@@ -223,6 +223,69 @@
           </div>
         </div>
 
+        <!-- TOPICS: single row square boxed layout -->
+        <div class="row mb-5">
+          <div class="col-12">
+            <div class="bg-white rounded shadow-sm p-4 p-lg-5">
+              <h4 class="text-center mb-4 pb-3 border-bottom fw-bold" style="color: #1a202c; font-size: 1.75rem">
+                <i class="fas fa-book-open text-primary me-2"></i>WHAT WILL BE COVERED
+              </h4>
+
+              <style>
+                /* Scoped styles for the topics grid */
+                .topics-grid { display:flex; gap:1rem; flex-wrap:wrap; align-items:stretch; }
+                .topics-grid .topic-card { background:#eaf6fb; border:1px solid rgba(15,23,36,0.06); border-radius:4px; box-shadow:0 1px 0 rgba(10,20,25,0.03); padding:18px; text-align:left; display:flex; flex-direction:column; justify-content:center; align-items:flex-start; color:#0f1720; }
+                .topics-grid .topic-card .icon { font-size:34px; color:#09324a; margin-bottom:12px; }
+                .topics-grid .topic-card h5 { margin:0 0 6px 0; font-size:1rem; font-weight:700; }
+                .topics-grid .topic-card p { margin:0; color:#475569; font-size:0.9rem; }
+
+                /* Make them full-width (stacked) on small screens */
+                .topics-grid .topic-card { flex:1 1 100%; aspect-ratio:1 / 1; min-height:140px; }
+
+                /* On medium+ screens show five equal boxes in one row */
+                @media (min-width: 768px) {
+                  .topics-grid { flex-wrap:nowrap; }
+                  .topics-grid .topic-card { flex:0 0 calc((100% - 4rem) / 5); }
+                }
+              </style>
+
+              <div class="topics-grid mt-3">
+                <div class="topic-card">
+                  <div class="icon"><i class="fas fa-credit-card" aria-hidden="true"></i></div>
+                  <h5>Cyber Security in FinTech</h5>
+                  <p>Payments, fraud prevention & secure onboarding</p>
+                </div>
+
+                <div class="topic-card">
+                  <div class="icon"><i class="fas fa-stethoscope" aria-hidden="true"></i></div>
+                  <h5>Cyber Security in Healthcare</h5>
+                  <p>Protecting patient data & medical devices</p>
+                </div>
+
+                <div class="topic-card">
+                  <div class="icon"><i class="fas fa-robot" aria-hidden="true"></i></div>
+                  <h5>Cyber Security in AI/ML</h5>
+                  <p>Model integrity, data poisoning & governance</p>
+                </div>
+
+                <div class="topic-card">
+                  <div class="icon"><i class="fas fa-landmark" aria-hidden="true"></i></div>
+                  <h5>Cyber Security in Government</h5>
+                  <p>National security, critical infra & policy</p>
+                </div>
+
+                <div class="topic-card">
+                  <div class="icon"><i class="fas fa-user-shield" aria-hidden="true"></i></div>
+                  <h5>Panel: DPDP Act / GRC</h5>
+                  <p>Data protection, compliance & governance</p>
+                </div>
+
+              </div>
+
+            </div>
+          </div>
+        </div>
+
         <div class="row mb-5">
           <div class="col-12">
             <div class="bg-white rounded shadow-sm p-4 p-lg-5">
@@ -670,7 +733,6 @@
         </div>
       </div>
     </section>
-    -->
 
     <section id="speakers-section" class="speakers-section section">
       <div class="container">
