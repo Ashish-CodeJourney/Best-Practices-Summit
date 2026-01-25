@@ -173,7 +173,7 @@
     const countdownElement = document.getElementById("countdown-box");
     if (!countdownElement) return;
 
-    const eventDate = new Date("2026-01-24T09:00:00").getTime();
+    const eventDate = new Date("2026-02-22T09:00:00").getTime();
 
     function updateCountdown() {
       const now = new Date().getTime();

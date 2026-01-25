@@ -363,7 +363,7 @@ document.addEventListener("DOMContentLoaded", function () {
     ctx.font = `${eventDateSize}px "Segoe UI", Arial, sans-serif`;
     ctx.fillStyle = "rgba(255, 255, 255, 0.95)";
     ctx.fillText(
-      "24 JANUARY 2025 • GANDHINAGAR",
+      "22 February 2026 • Ahmedabad",
       detailsX,
       detailsY + (isLandscape ? 30 : isSquare ? 35 : 40)
     );
