@@ -10,7 +10,7 @@ document.addEventListener("DOMContentLoaded", function () {
   const photoPreview = document.getElementById("photoPreview");
   const photoPreviewImg = document.getElementById("photoPreviewImg");
   const nameInput = document.getElementById("badgeName");
-  const orgInput = document.getElementById("badgeOrg");
+  const orgInput = null; // Organization removed
   const generateBtn = document.getElementById("generateBadge");
   const downloadBtn = document.getElementById("downloadBadge");
   const resetBtn = document.getElementById("resetBadge");
@@ -57,8 +57,7 @@ document.addEventListener("DOMContentLoaded", function () {
       canvas.height = config.height;
       if (badgeGenerated) {
         const name = nameInput.value.trim();
-        const org = orgInput.value.trim();
-        drawModernBadge(name, org, selectedRole);
+        drawModernBadge(name, selectedRole);
       } else {
         drawPlaceholder();
       }
@@ -86,7 +85,6 @@ document.addEventListener("DOMContentLoaded", function () {
   // Generate badge
   generateBtn.addEventListener("click", function () {
     const name = nameInput.value.trim();
-    const org = orgInput.value.trim();
 
     if (!name) {
       alert("Please enter your name");
@@ -107,7 +105,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
     // Generate badge with slight delay for smooth UX
     setTimeout(() => {
-      drawModernBadge(name, org, selectedRole);
+      drawModernBadge(name, selectedRole);
       badgeGenerated = true;
       downloadBtn.disabled = false;
       previewHint.innerHTML =
@@ -140,7 +138,6 @@ document.addEventListener("DOMContentLoaded", function () {
   // Reset badge
   resetBtn.addEventListener("click", function () {
     nameInput.value = "";
-    orgInput.value = "";
     document.getElementById("roleSpeaker").checked = true;
     document.getElementById("layoutPortrait").checked = true;
     selectedRole = "speaker";
@@ -160,7 +157,7 @@ document.addEventListener("DOMContentLoaded", function () {
   });
 
   // Draw modern badge design
-  function drawModernBadge(name, org, role) {
+  function drawModernBadge(name, role) {
     const width = canvas.width;
     const height = canvas.height;
     const isLandscape = selectedLayout === "landscape";
@@ -198,7 +195,7 @@ document.addEventListener("DOMContentLoaded", function () {
       logoX = 30;
       logoY = 30;
       nameY = height / 2 - 40;
-      roleY = height / 2 + 90;
+      roleY = height / 2 + 50;
       detailsY = height - 120;
       footerHeight = 100;
     } else if (isSquare) {
@@ -210,7 +207,7 @@ document.addEventListener("DOMContentLoaded", function () {
       logoX = 30;
       logoY = 30;
       nameY = 460;
-      roleY = 550;
+      roleY = 520;
       detailsY = 630;
       footerHeight = 120;
     } else {
@@ -222,7 +219,7 @@ document.addEventListener("DOMContentLoaded", function () {
       logoX = 30;
       logoY = 30;
       nameY = 480;
-      roleY = org ? 600 : 570;
+      roleY = 570;
       detailsY = 720;
       footerHeight = 150;
     }
@@ -283,9 +280,8 @@ document.addEventListener("DOMContentLoaded", function () {
     ctx.drawImage(uploadedPhoto, drawX, drawY, drawWidth, drawHeight);
     ctx.restore();
 
-    // Name and org positioning
+    // Name positioning
     let nameX = isLandscape ? 580 : width / 2;
-    let orgX = nameX;
 
     // Name text with shadow
     ctx.shadowColor = "rgba(0, 0, 0, 0.3)";
@@ -297,15 +293,6 @@ document.addEventListener("DOMContentLoaded", function () {
     ctx.font = `bold ${nameFontSize}px "Segoe UI", Arial, sans-serif`;
     ctx.textAlign = isLandscape ? "left" : "center";
     ctx.fillText(name.toUpperCase(), nameX, nameY);
-
-    // Organization with subtle styling
-    if (org) {
-      const orgFontSize = isLandscape ? 26 : isSquare ? 28 : 32;
-      ctx.font = `${orgFontSize}px "Segoe UI", Arial, sans-serif`;
-      ctx.fillStyle = "rgba(255, 255, 255, 0.95)";
-      const orgYOffset = isLandscape ? 35 : isSquare ? 40 : 50;
-      ctx.fillText(org, orgX, nameY + orgYOffset);
-    }
 
     ctx.shadowColor = "transparent";
     ctx.shadowBlur = 0;
