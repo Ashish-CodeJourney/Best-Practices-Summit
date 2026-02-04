@@ -10,7 +10,6 @@ document.addEventListener("DOMContentLoaded", function () {
   const photoPreview = document.getElementById("photoPreview");
   const photoPreviewImg = document.getElementById("photoPreviewImg");
   const nameInput = document.getElementById("badgeName");
-  const orgInput = null; // Organization removed
   const generateBtn = document.getElementById("generateBadge");
   const downloadBtn = document.getElementById("downloadBadge");
   const resetBtn = document.getElementById("resetBadge");
@@ -21,25 +20,50 @@ document.addEventListener("DOMContentLoaded", function () {
   let selectedRole = "speaker";
   let selectedLayout = "portrait";
 
-  // Layout configurations
+  // Layout configurations - exact Figma dimensions
   const layoutConfig = {
-    portrait: { width: 600, height: 900 },
-    landscape: { width: 900, height: 600 },
-    square: { width: 800, height: 800 }
+    portrait: { width: 564, height: 1000 },
+    landscape: { width: 1192, height: 700 },
+    square: { width: 564, height: 700 }
   };
 
   // Preload frame images
   const frameImages = {
-    background1: new Image(),
-    background2: new Image(),
-    footer: new Image(),
-    logoSide: new Image()
+    // Background images for different layouts
+    backgroundPortrait: new Image(),
+    backgroundLandscape: new Image(),
+    backgroundSquare: new Image(),
+    // Footer images for different layouts
+    footerPortrait: new Image(),
+    footerLandscape: new Image(),
+    footerSquare: new Image(),
+    // Photo frame images for different layouts
+    framePortrait: new Image(),
+    frameLandscape: new Image(),
+    frameSquare: new Image(),
+    // Logo images
+    bpsLogo: new Image(),
+    thmLogo: new Image()
   };
 
-  frameImages.background1.src = "assets/images/badge-frames/background1.png";
-  frameImages.background2.src = "assets/images/badge-frames/backgroun2.png";
-  frameImages.footer.src = "assets/images/badge-frames/footer.png";
-  frameImages.logoSide.src = "assets/images/badge-frames/logoside.png";
+  // Load background images
+  frameImages.backgroundPortrait.src = "assets/images/badge-frames/background-potrait.svg";
+  frameImages.backgroundLandscape.src = "assets/images/badge-frames/background-landscape.svg";
+  frameImages.backgroundSquare.src = "assets/images/badge-frames/background-square.svg";
+  
+  // Load footer images
+  frameImages.footerPortrait.src = "assets/images/badge-frames/footer-badge-potrait.svg";
+  frameImages.footerLandscape.src = "assets/images/badge-frames/footer-badge-landscape.svg";
+  frameImages.footerSquare.src = "assets/images/badge-frames/footer-badge-square.svg";
+  
+  // Load photo frame images
+  frameImages.framePortrait.src = "assets/images/badge-frames/frame-potrait.svg";
+  frameImages.frameLandscape.src = "assets/images/badge-frames/frame-landscape.svg";
+  frameImages.frameSquare.src = "assets/images/badge-frames/frame-square.svg";
+  
+  // Load logo images
+  frameImages.bpsLogo.src = "assets/images/badge-frames/bps-logo-badge.svg";
+  frameImages.thmLogo.src = "assets/images/badge-frames/logo-full-white-thm.svg";
 
   // Get selected role
   document.querySelectorAll('input[name="badgeRole"]').forEach((radio) => {
@@ -142,8 +166,8 @@ document.addEventListener("DOMContentLoaded", function () {
     document.getElementById("layoutPortrait").checked = true;
     selectedRole = "speaker";
     selectedLayout = "portrait";
-    canvas.width = 600;
-    canvas.height = 900;
+    canvas.width = 564;
+    canvas.height = 1000;
     photoInput.value = "";
     uploadedPhoto = null;
     badgeGenerated = false;
@@ -166,9 +190,15 @@ document.addEventListener("DOMContentLoaded", function () {
     // Clear canvas
     ctx.clearRect(0, 0, width, height);
 
-    // Choose background based on role
-    const bgImage =
-      role === "speaker" ? frameImages.background1 : frameImages.background2;
+    // Choose background image based on layout
+    let bgImage;
+    if (selectedLayout === "landscape") {
+      bgImage = frameImages.backgroundLandscape;
+    } else if (selectedLayout === "square") {
+      bgImage = frameImages.backgroundSquare;
+    } else {
+      bgImage = frameImages.backgroundPortrait;
+    }
 
     // Draw background image
     if (bgImage.complete) {
@@ -182,106 +212,242 @@ document.addEventListener("DOMContentLoaded", function () {
       ctx.fillRect(0, 0, width, height);
     }
 
-    // Layout-specific positioning
-    let photoSize, photoX, photoY, logoSize, logoX, logoY;
+    // Layout-specific positioning - adjusted for exact frame dimensions
+    let photoSize, photoX, photoY;
     let nameY, roleY, detailsY, footerHeight;
 
     if (isLandscape) {
-      // Landscape layout - photo on left, info on right
-      photoSize = 200;
-      photoX = 220;
-      photoY = height / 2;
-      logoSize = 120;
-      logoX = 30;
-      logoY = 30;
-      nameY = height / 2 - 40;
-      roleY = height / 2 + 50;
-      detailsY = height - 120;
-      footerHeight = 100;
+      // Landscape layout - 1192x700 - Frame 31551 design - FIXED
+      photoSize = 400; // Much larger frame to match reference
+      photoX = width - 250; // Position properly on right side
+      photoY = height / 2 + 20; // Center vertically with slight offset
+      nameY = 280; // Left side positioning for name
+      roleY = 340; // Role text below name
+      detailsY = 400; // Event details
+      footerHeight = 70;
     } else if (isSquare) {
-      // Square layout - centered and compact
-      photoSize = 220;
-      photoX = width / 2;
-      photoY = 250;
-      logoSize = 150;
-      logoX = 30;
-      logoY = 30;
-      nameY = 460;
-      roleY = 520;
-      detailsY = 630;
-      footerHeight = 120;
+      // Square layout - 564x700 - UPDATED: larger centered frame with top margin
+      photoSize = 350; // Much larger frame to match reference
+      photoX = width / 2; // Keep centered horizontally
+      photoY = 280; // Add top margin, position lower to center better
+      nameY = 520; // Moved down closer to footer
+      roleY = 560; // This will be "I'm attending" text
+      detailsY = 600; // This will be "BEST PRACTICES SUMMIT" - closer to footer
+      footerHeight = 50; // Much smaller footer
     } else {
-      // Portrait layout - original design
-      photoSize = 240;
-      photoX = width / 2;
-      photoY = 280;
-      logoSize = 180;
-      logoX = 30;
-      logoY = 30;
-      nameY = 480;
-      roleY = 570;
-      detailsY = 720;
-      footerHeight = 150;
+      // Portrait layout - 564x1000 - Frame 31552 design - FIXED
+      photoSize = 400; // Much larger frame to match reference
+      photoX = width / 2; // Centered horizontally
+      photoY = 300; // Positioned higher up like reference
+      nameY = 650; // Much lower, below the frame
+      roleY = 710; // Role text below name
+      detailsY = 770; // Event details
+      footerHeight = 80;
     }
 
-    // Logo side decoration
-    if (frameImages.logoSide.complete) {
-      ctx.globalAlpha = 1.0;
-      ctx.drawImage(frameImages.logoSide, logoX, logoY, logoSize, logoSize);
-      ctx.globalAlpha = 1.0;
-    }
-
-    // Photo section with modern circular frame
-    // Outer glow
-    ctx.shadowColor = "rgba(0, 0, 0, 0.3)";
-    ctx.shadowBlur = 20;
-    ctx.shadowOffsetX = 0;
-    ctx.shadowOffsetY = 10;
-
-    // White circle border with gradient
-    const photoGradient = ctx.createLinearGradient(
-      photoX - photoSize / 2,
-      photoY - photoSize / 2,
-      photoX + photoSize / 2,
-      photoY + photoSize / 2
-    );
-    photoGradient.addColorStop(0, "#ffffff");
-    photoGradient.addColorStop(1, "#f0f0f0");
-
-    ctx.beginPath();
-    ctx.arc(photoX, photoY, photoSize / 2 + 12, 0, Math.PI * 2);
-    ctx.fillStyle = photoGradient;
-    ctx.fill();
-
-    // Reset shadow
-    ctx.shadowColor = "transparent";
-    ctx.shadowBlur = 0;
-
-    // Draw photo (circular crop)
-    ctx.save();
-    ctx.beginPath();
-    ctx.arc(photoX, photoY, photoSize / 2, 0, Math.PI * 2);
-    ctx.closePath();
-    ctx.clip();
-
-    // Calculate photo dimensions to fill circle
-    const aspectRatio = uploadedPhoto.width / uploadedPhoto.height;
-    let drawWidth, drawHeight;
-    if (aspectRatio > 1) {
-      drawHeight = photoSize;
-      drawWidth = photoSize * aspectRatio;
+    // BPS Logo positioning - fixed for portrait and landscape to match reference
+    let bpsLogoWidth, bpsLogoHeight, bpsLogoX, bpsLogoY;
+    if (isLandscape) {
+      bpsLogoWidth = 200;
+      bpsLogoHeight = 65;
+      bpsLogoX = 60; // Left side positioning
+      bpsLogoY = 60; // Top positioning
+    } else if (isSquare) {
+      bpsLogoWidth = 233; // Keep square unchanged
+      bpsLogoHeight = 57;
+      bpsLogoX = 40; // More padding from edge
+      bpsLogoY = 40;
     } else {
-      drawWidth = photoSize;
-      drawHeight = photoSize / aspectRatio;
+      // Portrait - positioned like reference
+      bpsLogoWidth = 180;
+      bpsLogoHeight = 55;
+      bpsLogoX = 60; // Left side with proper margin
+      bpsLogoY = 120; // Below the frame area
     }
 
-    const drawX = photoX - drawWidth / 2;
-    const drawY = photoY - drawHeight / 2;
-    ctx.drawImage(uploadedPhoto, drawX, drawY, drawWidth, drawHeight);
-    ctx.restore();
+    if (frameImages.bpsLogo.complete) {
+      ctx.drawImage(frameImages.bpsLogo, bpsLogoX, bpsLogoY, bpsLogoWidth, bpsLogoHeight);
+    }
 
-    // Name positioning
-    let nameX = isLandscape ? 580 : width / 2;
+    // THM Logo positioning - fixed for portrait and landscape to match reference
+    let thmLogoWidth, thmLogoHeight, thmLogoX, thmLogoY;
+    if (isLandscape) {
+      thmLogoWidth = 140;
+      thmLogoHeight = 100;
+      thmLogoX = width - thmLogoWidth - 60; // Right side positioning
+      thmLogoY = 60; // Top positioning
+    } else if (isSquare) {
+      thmLogoWidth = 102; // Keep square unchanged
+      thmLogoHeight = 74;
+      thmLogoX = width - thmLogoWidth - 40; // More padding from edge
+      thmLogoY = 40;
+    } else {
+      // Portrait - positioned like reference
+      thmLogoWidth = 140;
+      thmLogoHeight = 100;
+      thmLogoX = width - thmLogoWidth - 60; // Right side with proper margin
+      thmLogoY = 120; // Below the frame area
+    }
+
+    if (frameImages.thmLogo.complete) {
+      ctx.drawImage(frameImages.thmLogo, thmLogoX, thmLogoY, thmLogoWidth, thmLogoHeight);
+    }
+
+    // Photo section with frame - photo fits perfectly within frame curves
+    // Choose frame image based on layout
+    let frameImage;
+    if (selectedLayout === "landscape") {
+      frameImage = frameImages.frameLandscape;
+    } else if (selectedLayout === "square") {
+      frameImage = frameImages.frameSquare;
+    } else {
+      frameImage = frameImages.framePortrait;
+    }
+
+    // Draw photo first (behind the frame) - fit within frame curves
+    if (uploadedPhoto) {
+      // Get actual frame dimensions
+      let frameWidth, frameHeight, cornerRadius;
+      if (selectedLayout === "square") {
+        frameWidth = 278;
+        frameHeight = 306;
+        cornerRadius = 20; // Estimated corner radius for square frame
+      } else if (selectedLayout === "portrait") {
+        frameWidth = 450;
+        frameHeight = 416;
+        cornerRadius = 25; // Estimated corner radius for portrait frame
+      } else {
+        // Landscape - keep original proportions
+        frameWidth = photoSize;
+        frameHeight = photoSize;
+        cornerRadius = 15;
+      }
+      
+      // Calculate inner area (accounting for frame border thickness)
+      const borderThickness = 8; // Estimated border thickness
+      const innerWidth = frameWidth - (borderThickness * 2);
+      const innerHeight = frameHeight - (borderThickness * 2);
+      const innerCornerRadius = Math.max(0, cornerRadius - borderThickness);
+      
+      // Calculate photo dimensions to fill the inner frame area
+      const aspectRatio = uploadedPhoto.width / uploadedPhoto.height;
+      const innerAspectRatio = innerWidth / innerHeight;
+      
+      let drawWidth, drawHeight;
+      
+      if (aspectRatio > innerAspectRatio) {
+        // Photo is wider than inner frame - fit to inner height, crop width
+        drawHeight = innerHeight;
+        drawWidth = innerHeight * aspectRatio;
+      } else {
+        // Photo is taller than inner frame - fit to inner width, crop height
+        drawWidth = innerWidth;
+        drawHeight = innerWidth / aspectRatio;
+      }
+
+      const drawX = photoX - drawWidth / 2;
+      const drawY = photoY - drawHeight / 2;
+      
+      // Add subtle shadow behind photo
+      ctx.shadowColor = "rgba(0, 0, 0, 0.2)";
+      ctx.shadowBlur = 15;
+      ctx.shadowOffsetX = 0;
+      ctx.shadowOffsetY = 8;
+      
+      // Create rounded rectangle clipping path to match frame curves
+      ctx.save();
+      ctx.beginPath();
+      
+      // Create rounded rectangle path for clipping
+      const clipX = photoX - innerWidth / 2;
+      const clipY = photoY - innerHeight / 2;
+      
+      ctx.moveTo(clipX + innerCornerRadius, clipY);
+      ctx.lineTo(clipX + innerWidth - innerCornerRadius, clipY);
+      ctx.quadraticCurveTo(clipX + innerWidth, clipY, clipX + innerWidth, clipY + innerCornerRadius);
+      ctx.lineTo(clipX + innerWidth, clipY + innerHeight - innerCornerRadius);
+      ctx.quadraticCurveTo(clipX + innerWidth, clipY + innerHeight, clipX + innerWidth - innerCornerRadius, clipY + innerHeight);
+      ctx.lineTo(clipX + innerCornerRadius, clipY + innerHeight);
+      ctx.quadraticCurveTo(clipX, clipY + innerHeight, clipX, clipY + innerHeight - innerCornerRadius);
+      ctx.lineTo(clipX, clipY + innerCornerRadius);
+      ctx.quadraticCurveTo(clipX, clipY, clipX + innerCornerRadius, clipY);
+      ctx.closePath();
+      
+      ctx.clip();
+      
+      ctx.drawImage(uploadedPhoto, drawX, drawY, drawWidth, drawHeight);
+      ctx.restore();
+      
+      // Reset shadow
+      ctx.shadowColor = "transparent";
+      ctx.shadowBlur = 0;
+    }
+
+    // Draw frame over the photo
+    if (frameImage && frameImage.complete) {
+      // Use actual frame dimensions
+      if (selectedLayout === "square") {
+        ctx.drawImage(
+          frameImage, 
+          photoX - 278 / 2, 
+          photoY - 306 / 2, 
+          278, 
+          306
+        );
+      } else if (selectedLayout === "portrait") {
+        ctx.drawImage(
+          frameImage, 
+          photoX - 450 / 2, 
+          photoY - 416 / 2, 
+          450, 
+          416
+        );
+      } else {
+        // Landscape
+        ctx.drawImage(
+          frameImage, 
+          photoX - photoSize / 2, 
+          photoY - photoSize / 2, 
+          photoSize, 
+          photoSize
+        );
+      }
+    } else {
+      // Fallback: rounded rectangular frame if frame image not loaded
+      ctx.strokeStyle = "#ffffff";
+      ctx.lineWidth = 8;
+      ctx.shadowColor = "rgba(0, 0, 0, 0.3)";
+      ctx.shadowBlur = 15;
+      ctx.shadowOffsetY = 5;
+      
+      const frameW = selectedLayout === "square" ? 278 : selectedLayout === "portrait" ? 450 : photoSize;
+      const frameH = selectedLayout === "square" ? 306 : selectedLayout === "portrait" ? 416 : photoSize;
+      const radius = selectedLayout === "square" ? 20 : selectedLayout === "portrait" ? 25 : 15;
+      
+      // Draw rounded rectangle
+      ctx.beginPath();
+      const x = photoX - frameW / 2;
+      const y = photoY - frameH / 2;
+      
+      ctx.moveTo(x + radius, y);
+      ctx.lineTo(x + frameW - radius, y);
+      ctx.quadraticCurveTo(x + frameW, y, x + frameW, y + radius);
+      ctx.lineTo(x + frameW, y + frameH - radius);
+      ctx.quadraticCurveTo(x + frameW, y + frameH, x + frameW - radius, y + frameH);
+      ctx.lineTo(x + radius, y + frameH);
+      ctx.quadraticCurveTo(x, y + frameH, x, y + frameH - radius);
+      ctx.lineTo(x, y + radius);
+      ctx.quadraticCurveTo(x, y, x + radius, y);
+      ctx.closePath();
+      
+      ctx.stroke();
+      
+      ctx.shadowColor = "transparent";
+      ctx.shadowBlur = 0;
+    }
+
+    // Name positioning - fixed for landscape and portrait
+    let nameX = isLandscape ? 60 : width / 2; // Left side for landscape, centered for others
 
     // Name text with shadow
     ctx.shadowColor = "rgba(0, 0, 0, 0.3)";
@@ -289,110 +455,186 @@ document.addEventListener("DOMContentLoaded", function () {
     ctx.shadowOffsetY = 2;
 
     ctx.fillStyle = "#ffffff";
-    const nameFontSize = isLandscape ? 44 : isSquare ? 48 : 56;
-    ctx.font = `bold ${nameFontSize}px "Segoe UI", Arial, sans-serif`;
+    const nameFontSize = 42 // Consistent font sizes
+    ctx.font = `bold ${nameFontSize}px "Prompt", "Segoe UI", Arial, sans-serif`;
     ctx.textAlign = isLandscape ? "left" : "center";
     ctx.fillText(name.toUpperCase(), nameX, nameY);
 
     ctx.shadowColor = "transparent";
     ctx.shadowBlur = 0;
 
-    // Role badge - modern pill design
-    const roleColors = {
-      speaker: { bg: "#FFD700", text: "#000000", icon: "🎤" },
-      attendee: { bg: "#00D4FF", text: "#000000", icon: "👥" },
-      volunteer: { bg: "#FF6B6B", text: "#FFFFFF", icon: "🤝" }
-    };
-
-    const roleText = {
-      speaker: "SPEAKER",
-      attendee: "ATTENDEE",
-      volunteer: "VOLUNTEER"
-    };
-
-    const roleConfig = roleColors[role];
-    const roleWidth = isLandscape ? 200 : isSquare ? 220 : 240;
-    const roleHeight = isLandscape ? 50 : isSquare ? 55 : 60;
-    const roleX = isLandscape ? 580 : width / 2 - roleWidth / 2;
-
-    // Role pill background with shadow
-    ctx.shadowColor = "rgba(0, 0, 0, 0.3)";
-    ctx.shadowBlur = 15;
-    ctx.shadowOffsetY = 5;
-
-    ctx.fillStyle = roleConfig.bg;
-    roundRect(ctx, roleX, roleY - 40, roleWidth, roleHeight, 30);
-    ctx.fill();
-
-    ctx.shadowColor = "transparent";
-    ctx.shadowBlur = 0;
-
-    // Role text
-    ctx.fillStyle = roleConfig.text;
-    const roleFontSize = isLandscape ? 26 : isSquare ? 28 : 32;
-    ctx.font = `bold ${roleFontSize}px "Segoe UI", Arial, sans-serif`;
-    ctx.textAlign = isLandscape ? "left" : "center";
-    const roleTextX = isLandscape ? roleX + roleWidth / 2 - 50 : width / 2;
-    ctx.fillText(roleText[role], roleTextX, roleY);
-
-    // Event details section
-    ctx.textAlign = isLandscape ? "left" : "center";
-    const detailsX = isLandscape ? 580 : width / 2;
-
-    // Event title
-    ctx.fillStyle = "#ffffff";
-    const eventTitleSize = isLandscape ? 22 : isSquare ? 24 : 28;
-    ctx.font = `bold ${eventTitleSize}px "Segoe UI", Arial, sans-serif`;
-    ctx.fillText("BEST PRACTICES SUMMIT", detailsX, detailsY);
-
-    // Date and location
-    const eventDateSize = isLandscape ? 18 : isSquare ? 20 : 24;
-    ctx.font = `${eventDateSize}px "Segoe UI", Arial, sans-serif`;
-    ctx.fillStyle = "rgba(255, 255, 255, 0.95)";
-    ctx.fillText(
-      "22 February 2026 • Ahmedabad",
-      detailsX,
-      detailsY + (isLandscape ? 30 : isSquare ? 35 : 40)
-    );
-
-    // Footer image or fallback
-    if (frameImages.footer.complete && !isLandscape) {
-      ctx.drawImage(
-        frameImages.footer,
-        0,
-        height - footerHeight,
-        width,
-        footerHeight
-      );
-    } else {
-      // Footer gradient
-      const footerGradient = ctx.createLinearGradient(
-        0,
-        height - footerHeight,
-        0,
-        height
-      );
-      footerGradient.addColorStop(0, "rgba(0, 0, 0, 0.3)");
-      footerGradient.addColorStop(1, "rgba(0, 0, 0, 0.6)");
-      ctx.fillStyle = footerGradient;
-      ctx.fillRect(0, height - footerHeight, width, footerHeight);
-
-      // Website and social
+    // Role section - keep square as is, update landscape and portrait to use gradient text
+    if (isSquare) {
+      // For square layout: keep original design (UNCHANGED)
+      const roleStatusText = {
+        speaker: "I'm speaking",
+        attendee: "I'm attending", 
+        volunteer: "I'm volunteering"
+      };
+      
+      // Create linear gradient for the role status text
+      const roleGradient = ctx.createLinearGradient(0, roleY - 20, 0, roleY + 20);
+      roleGradient.addColorStop(0, "#7E67D2");
+      roleGradient.addColorStop(1, "#FBE8F7");
+      ctx.fillStyle = roleGradient;
+      
+      ctx.font = `bold 33px "Prompt", "Segoe UI", Arial, sans-serif`; // Use Prompt font
       ctx.textAlign = "center";
-      ctx.fillStyle = "#ffffff";
-      const footerFontSize = isLandscape ? 18 : isSquare ? 20 : 22;
-      ctx.font = `bold ${footerFontSize}px "Segoe UI", Arial, sans-serif`;
-      ctx.fillText(
-        "thehackersmeetup.org",
-        width / 2,
-        height - footerHeight / 2 - 10
-      );
-      ctx.font = `${footerFontSize - 4}px "Segoe UI", Arial, sans-serif`;
-      ctx.fillText(
-        "@thehackersmeetup",
-        width / 2,
-        height - footerHeight / 2 + 20
-      );
+      ctx.fillText(roleStatusText[role], width / 2, roleY);
+    } else {
+      // For landscape and portrait: use gradient text like square
+      const roleStatusText = {
+        speaker: "I'm speaking",
+        attendee: "I'm attending", 
+        volunteer: "I'm volunteering"
+      };
+      
+      // Create linear gradient for the role status text
+      const roleGradient = ctx.createLinearGradient(0, roleY - 20, 0, roleY + 20);
+      roleGradient.addColorStop(0, "#7E67D2");
+      roleGradient.addColorStop(1, "#FBE8F7");
+      ctx.fillStyle = roleGradient;
+      
+      const roleFontSize = isLandscape ? 32 : 32;
+      ctx.font = `bold ${roleFontSize}px "Prompt", "Segoe UI", Arial, sans-serif`;
+      ctx.textAlign = isLandscape ? "left" : "center";
+      ctx.fillText(roleStatusText[role], nameX, roleY);
+    }
+
+    // Event details section - remove date/time from portrait and landscape
+    ctx.textAlign = isLandscape ? "left" : isSquare ? "center" : "center"; // Keep square centered
+    const detailsX = isLandscape ? 60 : isSquare ? width / 2 : width / 2; // Keep square centered
+
+    // Event title - keep square logic as is, remove date/time from others
+    ctx.fillStyle = "#ffffff";
+    if (isSquare) {
+      // Square layout - keep original design (UNCHANGED)
+      const eventTitleSize = 33;
+      ctx.font = `bold ${eventTitleSize}px "Prompt", "Segoe UI", Arial, sans-serif`;
+      ctx.fillText("BEST PRACTICES SUMMIT", detailsX, detailsY);
+      // No date and location for square layout
+    } else {
+      // Portrait and landscape layouts - NO DATE/TIME
+      const eventTitleSize = isLandscape ? 28 : 28;
+      ctx.font = `bold ${eventTitleSize}px "Prompt", "Segoe UI", Arial, sans-serif`;
+      ctx.fillText("BEST PRACTICES SUMMIT", detailsX, detailsY);
+      // REMOVED: Date and location for portrait and landscape
+    }
+
+    // Footer image based on layout - these images already contain the social media icons
+    // and website information in the correct professional layout
+    let footerImage;
+    if (selectedLayout === "landscape") {
+      footerImage = frameImages.footerLandscape;
+    } else if (selectedLayout === "square") {
+      footerImage = frameImages.footerSquare;
+    } else {
+      footerImage = frameImages.footerPortrait;
+    }
+
+    if (footerImage.complete) {
+      console.log('Footer image completed');
+      
+      if (isSquare) {
+        // Square layout - footer with padding like the fallback
+        const footerY = height - footerHeight - 20;
+        const footerX = 30; // Side padding
+        const footerW = width - 60; // Width with padding (60px each side)
+        
+        // Draw footer image with padding
+        ctx.drawImage(
+          footerImage,
+          footerX, // Start from padded position
+          footerY,
+          footerW, // Use padded width
+          footerHeight
+        );
+      } else if (isLandscape) {
+        // Landscape layout - footer with side padding
+        const footerY = height - footerHeight;
+        const footerX = 40; // Side padding for landscape
+        const footerW = width - 80; // Width with padding (40px each side)
+        
+        ctx.drawImage(
+          footerImage,
+          footerX,
+          footerY,
+          footerW,
+          footerHeight
+        );
+      } else {
+        // Portrait layout - footer with side padding
+        const footerY = height - footerHeight;
+        const footerX = 30; // Side padding for portrait
+        const footerW = width - 60; // Width with padding (30px each side)
+        
+        ctx.drawImage(
+          footerImage,
+          footerX,
+          footerY,
+          footerW,
+          footerHeight
+        );
+      }
+    } else {
+      console.log('in else')
+      // Minimal footer fallback - just a subtle bar
+      if (isSquare) {
+        // Square layout - compact footer with proper styling like reference
+        const footerY = height - footerHeight - 20; // Position closer to text
+        const footerX = 60; // Much more side padding like reference
+        const footerW = width - 120; // Width with proper padding (60px each side)
+        const footerH = 40; // Much smaller height
+        
+        // Rounded rectangle background - subtle gradient like reference
+        const footerGradient = ctx.createLinearGradient(footerX, footerY, footerX, footerY + footerH);
+        footerGradient.addColorStop(0, "rgba(255, 255, 255, 0.12)");
+        footerGradient.addColorStop(1, "rgba(255, 255, 255, 0.08)");
+        ctx.fillStyle = footerGradient;
+        
+        // Draw rounded rectangle
+        ctx.beginPath();
+        ctx.roundRect(footerX, footerY, footerW, footerH, 20);
+        ctx.fill();
+        
+        // Add subtle border like reference
+        ctx.strokeStyle = "rgba(255, 255, 255, 0.25)";
+        ctx.lineWidth = 1;
+        ctx.stroke();
+        
+        // Website text - smaller and centered, matching reference
+        ctx.textAlign = "center";
+        ctx.fillStyle = "rgba(255, 255, 255, 0.85)";
+        ctx.font = `14px "Segoe UI", Arial, sans-serif`;
+        ctx.fillText(
+          "@thehackersmeetup",
+          width / 2,
+          footerY + footerH / 2 + 5
+        );
+      } else {
+        // Other layouts - original footer
+        const footerGradient = ctx.createLinearGradient(
+          0,
+          height - footerHeight,
+          0,
+          height
+        );
+        footerGradient.addColorStop(0, "rgba(0, 0, 0, 0.2)");
+        footerGradient.addColorStop(1, "rgba(0, 0, 0, 0.4)");
+        ctx.fillStyle = footerGradient;
+        ctx.fillRect(0, height - footerHeight, width, footerHeight);
+        
+        // Simple website text
+        ctx.textAlign = "center";
+        ctx.fillStyle = "#ffffff";
+        const footerFontSize = isLandscape ? 16 : 20;
+        ctx.font = `${footerFontSize}px "Segoe UI", Arial, sans-serif`;
+        ctx.fillText(
+          "thehackersmeetup.org",
+          width / 2,
+          height - footerHeight / 2 + 5
+        );
+      }
     }
   }
 
