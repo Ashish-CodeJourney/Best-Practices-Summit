@@ -132,6 +132,15 @@ document.addEventListener("DOMContentLoaded", function () {
       return;
     }
 
+    // Check if name exceeds 18 characters
+    if (name.length > 18) {
+      alert(
+        "Name must be 18 characters or less. Current length: " + name.length,
+      );
+      nameInput.focus();
+      return;
+    }
+
     if (!uploadedPhoto) {
       alert("Please upload a photo");
       photoInput.click();
@@ -251,17 +260,17 @@ document.addEventListener("DOMContentLoaded", function () {
       detailsY = 600; // This will be "BEST PRACTICES SUMMIT" - closer to footer
       footerHeight = 50; // Much smaller footer
     } else {
-      // Portrait layout - 564x1000 - Frame 31552 design - FIXED
-      photoSize = 400; // Much larger frame to match reference
+      // Portrait layout - 564x1000 - Frame 31552 design - FIXED to match reference
+      photoSize = 442; // Much larger frame to match reference
       photoX = width / 2; // Centered horizontally
-      photoY = 420; // Positioned lower to avoid logo overlap
-      nameY = 770; // Much lower, below the frame
-      roleY = 830; // Role text below name
-      detailsY = 890; // Event details
-      footerHeight = 80;
+      photoY = 290; // Moved up by 20px to reduce top spacing
+      nameY = 750; // Adjusted to be below the frame
+      roleY = 810; // Role text below name
+      detailsY = 870; // Event details
+      footerHeight = 67; // Exact height as specified
     }
 
-    // BPS Logo positioning - fixed for portrait and landscape to match reference
+    // Logo positioning - will be drawn AFTER the photo frame to appear on top
     let bpsLogoWidth, bpsLogoHeight, bpsLogoX, bpsLogoY;
     if (isLandscape) {
       bpsLogoWidth = 200;
@@ -274,24 +283,14 @@ document.addEventListener("DOMContentLoaded", function () {
       bpsLogoX = 40; // More padding from edge
       bpsLogoY = 40;
     } else {
-      // Portrait - positioned like reference
-      bpsLogoWidth = 180;
-      bpsLogoHeight = 55;
+      // Portrait - positioned at top like reference
+      bpsLogoWidth = 233;
+      bpsLogoHeight = 57;
       bpsLogoX = 60; // Left side with proper margin
-      bpsLogoY = 120; // Below the frame area
+      bpsLogoY = 540; // Moved up by 20px to reduce top spacing
     }
 
-    if (frameImages.bpsLogo.complete) {
-      ctx.drawImage(
-        frameImages.bpsLogo,
-        bpsLogoX,
-        bpsLogoY,
-        bpsLogoWidth,
-        bpsLogoHeight,
-      );
-    }
-
-    // THM Logo positioning - fixed for portrait and landscape to match reference
+    // THM Logo positioning
     let thmLogoWidth, thmLogoHeight, thmLogoX, thmLogoY;
     if (isLandscape) {
       thmLogoWidth = 140;
@@ -304,21 +303,11 @@ document.addEventListener("DOMContentLoaded", function () {
       thmLogoX = width - thmLogoWidth - 40; // More padding from edge
       thmLogoY = 40;
     } else {
-      // Portrait - positioned like reference
-      thmLogoWidth = 140;
-      thmLogoHeight = 100;
+      // Portrait - positioned at top like reference
+      thmLogoWidth = 120;
+      thmLogoHeight = 87;
       thmLogoX = width - thmLogoWidth - 60; // Right side with proper margin
-      thmLogoY = 120; // Below the frame area
-    }
-
-    if (frameImages.thmLogo.complete) {
-      ctx.drawImage(
-        frameImages.thmLogo,
-        thmLogoX,
-        thmLogoY,
-        thmLogoWidth,
-        thmLogoHeight,
-      );
+      thmLogoY = 530; // Moved up by 20px to reduce top spacing
     }
 
     // Photo section with frame - photo fits perfectly within frame curves
@@ -503,6 +492,27 @@ document.addEventListener("DOMContentLoaded", function () {
       ctx.shadowBlur = 0;
     }
 
+    // Draw logos AFTER the photo frame so they appear on top
+    if (frameImages.bpsLogo.complete) {
+      ctx.drawImage(
+        frameImages.bpsLogo,
+        bpsLogoX,
+        bpsLogoY,
+        bpsLogoWidth,
+        bpsLogoHeight,
+      );
+    }
+
+    if (frameImages.thmLogo.complete) {
+      ctx.drawImage(
+        frameImages.thmLogo,
+        thmLogoX,
+        thmLogoY,
+        thmLogoWidth,
+        thmLogoHeight,
+      );
+    }
+
     // Name positioning - fixed for landscape and portrait
     let nameX = isLandscape ? 60 : width / 2; // Left side for landscape, centered for others
 
@@ -562,7 +572,7 @@ document.addEventListener("DOMContentLoaded", function () {
       roleGradient.addColorStop(1, "#FBE8F7");
       ctx.fillStyle = roleGradient;
 
-      const roleFontSize = isLandscape ? 32 : 32;
+      const roleFontSize = isLandscape ? 32 : 42; // 42px for portrait
       ctx.font = `bold ${roleFontSize}px "Prompt", "Segoe UI", Arial, sans-serif`;
       ctx.textAlign = isLandscape ? "left" : "center";
       ctx.fillText(roleStatusText[role], nameX, roleY);
@@ -582,9 +592,15 @@ document.addEventListener("DOMContentLoaded", function () {
       // No date and location for square layout
     } else {
       // Portrait and landscape layouts - NO DATE/TIME
-      const eventTitleSize = isLandscape ? 28 : 28;
+      const eventTitleSize = isLandscape ? 28 : 42; // 42px for portrait
       ctx.font = `bold ${eventTitleSize}px "Prompt", "Segoe UI", Arial, sans-serif`;
-      ctx.fillText("BEST PRACTICES SUMMIT", detailsX, detailsY);
+
+      // For portrait, constrain to 494px max width
+      if (!isLandscape) {
+        ctx.fillText("BEST PRACTICES SUMMIT", detailsX, detailsY, 494);
+      } else {
+        ctx.fillText("BEST PRACTICES SUMMIT", detailsX, detailsY);
+      }
       // REMOVED: Date and location for portrait and landscape
     }
 
@@ -624,8 +640,9 @@ document.addEventListener("DOMContentLoaded", function () {
 
         ctx.drawImage(footerImage, footerX, footerY, footerW, footerHeight);
       } else {
-        // Portrait layout - footer with side padding
-        const footerY = height - footerHeight;
+        // Portrait layout - footer with side padding and bottom margin
+        const bottomMargin = 20; // Bottom margin for portrait
+        const footerY = height - footerHeight - bottomMargin;
         const footerX = 30; // Side padding for portrait
         const footerW = width - 60; // Width with padding (30px each side)
 
