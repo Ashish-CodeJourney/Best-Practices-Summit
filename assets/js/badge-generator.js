@@ -254,10 +254,10 @@ document.addEventListener("DOMContentLoaded", function () {
       // Portrait layout - 564x1000 - Frame 31552 design - FIXED
       photoSize = 400; // Much larger frame to match reference
       photoX = width / 2; // Centered horizontally
-      photoY = 300; // Positioned higher up like reference
-      nameY = 650; // Much lower, below the frame
-      roleY = 710; // Role text below name
-      detailsY = 770; // Event details
+      photoY = 420; // Positioned lower to avoid logo overlap
+      nameY = 770; // Much lower, below the frame
+      roleY = 830; // Role text below name
+      detailsY = 890; // Event details
       footerHeight = 80;
     }
 
@@ -653,8 +653,7 @@ document.addEventListener("DOMContentLoaded", function () {
         ctx.fillStyle = footerGradient;
 
         // Draw rounded rectangle
-        ctx.beginPath();
-        ctx.roundRect(footerX, footerY, footerW, footerH, 20);
+        roundRect(ctx, footerX, footerY, footerW, footerH, 20);
         ctx.fill();
 
         // Add subtle border like reference
