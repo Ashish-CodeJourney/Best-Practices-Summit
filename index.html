@@ -1006,9 +1006,8 @@
                     <div class="small text-muted">
                       <del>Original: Rs.2,000</del>
                     </div>
-                    <button class="btn btn-sm btn-primary mt-1 buy-ticket-btn" data-amount="100000"
-                      data-name="Early Bird">
-                      Buy Now
+                    <button class="btn btn-sm btn-secondary mt-1" disabled>
+                      Sold Out
                     </button>
                   </div>
                 </div>
@@ -1532,6 +1531,11 @@
   </script>
   <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
   <script>
+    // RAZORPAY_KEY_ID must be injected into window.RAZORPAY_KEY_ID during the build
+    // or server-side rendering process using the RAZORPAY_KEY_ID value from .env
+    var RAZORPAY_KEY = window.RAZORPAY_KEY_ID || "";
+  </script>
+  <script>
     document.addEventListener("DOMContentLoaded", function () {
       document.querySelectorAll(".buy-ticket-btn").forEach(function (btn) {
         btn.addEventListener("click", function (e) {
@@ -1546,12 +1550,21 @@
             return;
           }
 
+          // Check if Razorpay key is configured
+          if (!RAZORPAY_KEY) {
+            console.error("Razorpay key is not configured");
+            alert(
+              "Payment system is not configured. Please contact the administrator.",
+            );
+            return;
+          }
+
           try {
             var amount = this.getAttribute("data-amount");
             var name = this.getAttribute("data-name");
 
             var options = {
-              key: "rzp_live_SNuw6JVmpkOI5f",
+              key: RAZORPAY_KEY,
               currency: "INR",
               name: "Best Practices Summit",
               description: "Purchase: " + name,
