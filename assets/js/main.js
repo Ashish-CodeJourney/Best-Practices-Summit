@@ -50,7 +50,7 @@ let spy = new Gumshoe("#navigation a", {
 });
 
 /* ======= Countdown ========= */
-let target_date = new Date("Mar 07, 2026").getTime();
+let target_date = new Date("Mar 14, 2026").getTime();
 let days, hours, minutes, seconds;
 let countdown = document.getElementById("countdown-box");
 let days_span = document.createElement("SPAN");
