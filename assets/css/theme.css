@@ -13446,6 +13446,7 @@ a.theme-link:hover {
   font-size: 1.25rem;
   color: #7c3aed;
   margin-bottom: 0.5rem;
+  white-space: nowrap;
 }
 .schedule-tab-content .item .meta .profile {
   margin-top: 0.5rem;
